@@ -5,6 +5,20 @@ local GGUI = PvPAssistant.GGUI
 local GUTIL = PvPAssistant.GUTIL
 local f = GUTIL:GetFormatter()
 
+---@param spellid number SpellID to request data for
+---@param continueWith function function to run after loading the spell data, accepts SpellInfo object as param, which can be nil if spell does not exist.
+local loadSpellData = function(spellIDToLoad, continueWith) 
+    local loadFrame = CreateFrame("Frame");
+    loadFrame:RegisterEvent("SPELL_DATA_LOAD_RESULT");
+    loadFrame:SetScript("OnEvent", function(_, _, spellID, success)
+        if(spellID ~= spellIDToLoad) then return end
+        local spellInfo = C_Spell.GetSpellInfo(spellIDToLoad);
+        continueWith(spellInfo);
+    end)
+
+    C_Spell.RequestLoadSpellData(spellIDToLoad);
+end
+
 ---@class PvPAssistant.ABILITY_CATALOGUE
 PvPAssistant.ABILITY_CATALOGUE = PvPAssistant.ABILITY_CATALOGUE
 
@@ -161,9 +175,14 @@ function PvPAssistant.ABILITY_CATALOGUE.FRAMES:InitAbilitiesCatalogueTab()
             }
 
             spellColumn.SetSpell = function(self, spellID)
-                spellColumn.icon:SetSpell(spellID)
-                local spellname = select(1, GetSpellInfo(spellID))
-                spellColumn.spellName:SetText(spellname)
+        
+                ---@param spellInfo? SpellInfo
+                loadSpellData(spellID, function(spellInfo)
+                    if(spellInfo == nil) then return end
+
+                    spellColumn.icon:SetSpell(spellID)
+                    spellColumn.spellName:SetText(spellInfo.name);
+                end)
             end
 
             durationColumn.text = GGUI.Text {

@@ -1289,7 +1289,7 @@ PvPAssistant.ABILITY_DATA = {
                 severity = SEVERITY.LOW,
             },
             { -- Serenity
-                spellID = 152173,
+                spellID = 285272,
                 subType = SUB_TYPES.OFFENSIVE,
                 abilityType = TYPES.OFFENSIVE,
                 severity = SEVERITY.LOW,
