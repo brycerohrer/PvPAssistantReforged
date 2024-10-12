@@ -14,6 +14,7 @@ local loadSpellData = function(spellIDToLoad, continueWith)
         if(spellID ~= spellIDToLoad) then return end
         local spellInfo = C_Spell.GetSpellInfo(spellIDToLoad);
         continueWith(spellInfo);
+        loadFrame:UnregisterAllEvents();
     end)
 
     C_Spell.RequestLoadSpellData(spellIDToLoad);
