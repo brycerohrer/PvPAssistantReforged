@@ -260,7 +260,7 @@ function PvPAssistant.UTIL:CreateClassFilterFrame(options)
     -- Replace deprecated function with the updated API
     for classID = 1, GetNumClasses() do
         local classData = C_CreatureInfo.GetClassInfo(classID)
-        if classData and classData.classFile ~= "EVOKER" then -- Exclude EVOKER if not needed
+        if classData and classData.classFile then -- Exclude EVOKER if not needed
             classInfo[classData.classFile] = classData.className
         end
     end
